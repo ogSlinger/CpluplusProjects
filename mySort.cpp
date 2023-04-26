@@ -2,6 +2,7 @@
 #include <vector>
 #include <random>
 #include <chrono>
+#include <list>
 
 using namespace std;
 
@@ -88,7 +89,7 @@ void myImprovedSort(vector<int>& arr, int size) {
     vector<vector<int>> instructions(size, vector<int> (3)); //0 is the element, 1 is the numCount, 2 is the rank
 
     for (int i = 0; i < size; i++){
-        if (isSorted(arr[i], i, arr)) {
+        if (arr[i] <= arr[i-1]) {
             continue;
         }
 
@@ -114,6 +115,10 @@ void myImprovedSort(vector<int>& arr, int size) {
     }
 }
 
+void myImprovedSort(list<int>& arr, int size) {
+    //TODO: MAKE ITERATORS GREAT AGAIN
+}
+
 
 void startTest(vector<int>& arr, int choice) {
     chrono::high_resolution_clock::time_point start_time, end_time;
@@ -137,6 +142,20 @@ void startTest(vector<int>& arr, int choice) {
     cout <<"Duration: " <<seconds <<endl;
 }
 
+void startTest(list<int>& arr, int choice) {
+    chrono::high_resolution_clock::time_point start_time, end_time;
+    chrono::duration<double> duration;
+    start_time = chrono::high_resolution_clock::now();
+
+    myImprovedSort(arr, arr.size());
+    
+    end_time = chrono::high_resolution_clock::now();
+    duration = chrono::duration_cast<std::chrono::duration<double>>(end_time - start_time);
+    double seconds = duration.count();
+
+    cout <<"Duration: " <<seconds <<endl;
+}
+
 void printVector(vector<int>& vec) {
     cout <<"Vector: " <<endl;
     for (int i = 0; i < vec.size(); i++) {
@@ -144,6 +163,7 @@ void printVector(vector<int>& vec) {
     }
     cout <<endl;
 }
+
 
 int main() {
     random_device rd;                           //Rand Stuff
@@ -156,9 +176,11 @@ int main() {
     vector<int> arrTwo(vectorSize);
     vector<int> arrThree(vectorSize);
     vector<int> arrFour(vectorSize);
+    list<int> testList;    
 
     for (int i = 0; i < vectorSize; i++) {      //Generate the first vector
         arr[i] = dis(gen);
+        testList.push_back(arr[i]);
     }
 
     arrTwo = arr;                               //Make all vectors the same
@@ -173,7 +195,18 @@ int main() {
     startTest(arrThree, 2);
     cout << "Selection Sort on " <<arrThree.size() <<" of the same ints: " <<endl;
     startTest(arrFour, 3);
-
+    cout << "My algorithm on the " <<testList.size() <<"  sorted ints: " <<endl;
+    startTest(arrThree, 0);
+    cout << "Bubble Sort on the " <<testList.size() <<" sorted ints: " <<endl;
+    startTest(arrThree, 1);
+    cout << "My algorithm #2 on the " <<testList.size() <<" sorted ints: " <<endl;
+    startTest(arrThree, 2);
+    cout << "Selection Sort on the " <<testList.size() <<" sorted ints: " <<endl;
+    startTest(arrThree, 3);
+    int x;
+    cin >> x;
+    cin >> x;
+    
     return 0;
 }
     
